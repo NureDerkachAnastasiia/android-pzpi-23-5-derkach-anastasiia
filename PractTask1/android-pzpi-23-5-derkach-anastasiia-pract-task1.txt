@@ -1,1 +1,118 @@
+			Міністерство освіти і науки України
+		Харківський національний університет радіоелектроніки
+
+
+			Кафедра "Програмна інженерія"
+
+
+
+				Практична робота №1
+			Дисципліна: Програмування під Android
+
+
+
+
+
+Виконала 
+студентка групи ПЗПІ-23-5
+Деркач Анастасія Сергіївна
+
+Перевірив
+Старший викладач каф. ПІ
+Сокорчук Ігор Петрович
+
+
+
+2024
+
+
+1 ВСТАНОВЛЕННЯ ANDROID STUDIO. СТВОРЕННЯ МІНІМАЛЬНОГО ANDROID ЗАСТОСУНКУ. СТВОРЕННЯ GITHUB РЕПОЗИТОРІЮ ТА ПУБЛІКАЦІЯ КОДУ ЗАСТОСУНКУ
+	1.1 Завдання
+
+	Встановлення Android Studio:
+	1. Завантаження Android Studio.
+	2. Встановлення Android Studio.
+	3. Налаштування Android Studio після встановлення.
+	4. Налаштування емулятора Android. 
+
+	Створення мінімального Android застосунку:
+	1. Створення нового Android проекту.
+	2. Ознайомлення зі структурою проекту.
+	3. Налаштування емулятора або підключення фізичного пристрою.
+	4. Запуск мінімального застосунку.
+	5. Внесення змін до інтерфейсу.
+	6. Взаємодія з інтерфейсом.
+
+	Створення GitHub репозиторію та публікація коду застосунку:
+	1. Налаштування GitHub в Android Studio.
+	2. Створення нового GitHub репозиторію.
+	3. Публікація коду застосунку на GitHub.
+	4. Перевірка репозиторію на GitHub.
+	5. Додавання змін до репозиторію.
+
+	1.2 Хід роботи
+	1.2.1 Встановлення Android Studio
+     Щоб встановити Android Studio на свій комп'ютер, я завантажила останню версію цієї програми з офіційного сайту. Запустила інсталяційний файл та слідувала інструкціям. Встановлення завершилось, я налаштувала Android SDK, запустила Android Virtual Device Manager та перевірила його роботу.
+     
+     1.2.2 Створення мінімального Android застосунку
+     
+	За шаблоном Empty Views Activity було створено новий проект, обрано ім'я проекту, директорію збереження файлів проекту та мову програмування (Java).
+	У файлі MainActivity.java прописаний клас MainActivity, в якому знаходиться метод onCreate().
+	Код класу MainActivity:
+
+1	public class MainActivity extends AppCompatActivity {
+2
+3	    @Override
+4	    protected void onCreate(Bundle savedInstanceState) {
+5	        super.onCreate(savedInstanceState);
+6	        EdgeToEdge.enable(this);
+7	        setContentView(R.layout.activity_main);
+8	        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+9	            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+10	            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+11	           return insets;
+12	        });
+13	    }
+14	}
+
+     У файлі activity_main.xml існує базовий елемент TextView.
+     Додано кнопку та функціонал до неї, а саме зміна тексту елемента TextView. Змінено її розмір та текст.
+	У файлі MainActivity.java створено обробник події для цієї кнопки. Код класу MainActivity у файлі MainActivity.java:
+
+
+1	public class MainActivity extends AppCompatActivity {
+2    
+3	    @Override
+4	    protected void onCreate(Bundle savedInstanceState) {
+5	        super.onCreate(savedInstanceState);
+6	        EdgeToEdge.enable(this);
+7	        setContentView(R.layout.activity_main);
+8
+9	        Button button = findViewById(R.id.button);
+10	        TextView textView = findViewById(R.id.textView);
+11
+12	        button.setOnClickListener(new View.OnClickListener() {
+13	            @Override
+14	            public void onClick(View view) {
+15	                textView.setText("Дякую!");
+16	            }
+17	        });
+18
+19	        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+20	            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+21	            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+22	            return insets;
+23	        });
+24	    }
+25	}
+	
+	1.2.3 Створення GitHub репозиторію та публікація коду застосунку
+
+	На сайті github.com було створено акаунт згідно вимогам. У проекті в Android Studio ініціалізовано Git. Далі опубліковано проект на GitHub.
+
+	1.3 Висновки
+
+	У результаті виконання практичного було створено мінімальний Android застосунок. Основна мета роботи полягала в ознайомленні з середовищем Android Studio та базовими принципами розробки мобільних додатків. Під час роботи над проектом було вивчено структуру застосунку. Було реалізовано обробник подій натискання на кнопку, що змінював текстове поле на ній. Виконання завдання дозволило ознайомитись з програмуванням під Android та отримати перший досвід створення і налагодження мобільного застосунку.
+
+	1.4 Використані джерела
 
