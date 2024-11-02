@@ -41,7 +41,7 @@
 2.1. Проєкт містить основні файли: MainActivity.java, AndroidManifest.xml, activity-main.xml.
 2.2. Додамо до файлу MainActivity.java усі методи життєвого циклу:  onCreate(), onStart(), onResume(), onPause(), onStop(), onDestroy()
 3. Ознайомлення з життєвим циклом Activity.
-3.1. Для кращого розуміння порядку викликів методів життєвого циклу, додамо логування до кожного з методів. Для цього використовуємо клас Log.
+3.1. Для кращого розуміння порядку викликів методів життєвого циклу, додамо логування до кожного з методів. Для цього використовуємо клас Log (додаток А).
 3.2. Запускаємо застосунок на емуляторі або фізичному пристрої. Відкриваємо Logcat в Android Studio і спостерігаємо за порядком викликів методів при запуску і закритті Activity: onCreate(), onStart(), onResume() при запуску і onPause(), onStop(), onDestroy() при закритті Activity.
 4. Створення елементу TextView.
 4.1. У панелі компонентів знаходимо компонент "TextView" в категорії "Text").
@@ -59,3 +59,52 @@
 	Посилання на відеозвіт: https://youtu.be/xSnWzZe_HOE
 
 
+Додаток А
+	Код методів життєвого циклу:
+1 @Override
+2     protected void onCreate(Bundle savedInstanceState) {
+3         super.onCreate(savedInstanceState);
+4         Log.d(TAG, "onCreate: called");
+5         EdgeToEdge.enable(this);
+6         setContentView(R.layout.activity_main);
+7
+8      
+9 ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main),
+10 (v, insets) -> {
+11            Insets systemBars =
+12 insets.getInsets(WindowInsetsCompat.Type.systemBars());
+13            v.setPadding(systemBars.left, systemBars.top,
+14 systemBars.right, systemBars.bottom);
+15            return insets;
+16        });
+17    }
+18
+19    @Override
+20    protected void onStart() {
+21        super.onStart();
+22        Log.d(TAG, "onStart: called");
+23    }
+24
+25    @Override
+26   protected void onResume() {
+27        super.onResume();
+28        Log.d(TAG, "onResume: called");
+29    }
+30
+ 31   @Override
+ 32   protected void onPause() {
+ 33       super.onPause();
+ 34       Log.d(TAG, "onPause: called");
+ 35   }
+36
+37    @Override
+38    protected void onStop() {
+39        super.onStop();
+40        Log.d(TAG, "onStop: called");
+41    }
+42
+43    @Override
+44    protected void onDestroy() {
+45        super.onDestroy();
+46        Log.d(TAG, "onDestroy: called");
+47    }
