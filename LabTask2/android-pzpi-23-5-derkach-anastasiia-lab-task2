@@ -1,0 +1,82 @@
+Міністерство освіти і науки України
+Харківський національний університет радіоелектроніки
+
+
+Кафедра «Програмна інженерія»
+
+
+
+Звіт
+з лабораторної роботи №2
+з дисципліни «Програмування під Android»
+
+
+
+
+
+
+
+
+Виконала:								Перевірив:
+ст. гр. ПЗПІ-23-5							ст. викл. каф. ПІ
+Деркач Анастасія							Сокорчук І. П.
+
+
+
+
+Харків 2024
+2 ЛАБОРАТОРНА РОБОТА
+2.1 Завдання
+
+Розробити редактор, у якому з допомогою трьох регуляторів SeekBar встановлюється колір панелі.
+
+Регулятори визначають RGB компоненти кольору панелі. Зовнішній вигляд екрану редактора повинен залежати від орієнтації пристрою. У портретній орієнтації пристрою, регулятори повинні знаходитися знизу від панелі, займати 1/3 висоти і розташовуватися на всю ширину екрану. У ландшафтній – праворуч від панелі і займати 1/3 ширини. Решту екрану повинна займати кольорова панель.
+
+2.2 Хід роботи
+
+Створюємо новий проект за шаблоном Empty Views Activity.
+У проекті одразу створюємо у папці res ще одну підпапку layout-land, туди копіюємо файл activity_main.xml. Таким чином ми зможемо редагувати вигляд активності у ландшафтній орієнтації.
+Далі у файл activity_main.xml додаємо елементи View (панель, яка буде змінювати колір), SeekBar (інструмент, за допомогою якого користувач буде змінювати колір), TextView та налаштовуємо їх згідно завдання.
+Код елемента View:
+1 <View
+2     android:id="@+id/view"
+3     android:layout_width="408dp"
+4     android:layout_height="612dp"
+5     android:background="#090808"
+6     app:layout_constraintBottom_toBottomOf="parent"
+7     app:layout_constraintEnd_toEndOf="parent"
+8     app:layout_constraintStart_toStartOf="parent"
+9     app:layout_constraintTop_toTopOf="parent"
+10   app:layout_constraintVertical_bias="0.0" />
+Код одного з елементів SeekBar:
+1 <SeekBar
+2     android:id="@+id/seekBarG"
+3     android:layout_width="248dp"
+4     android:layout_height="20dp"
+5     android:max="255"
+6     app:layout_constraintBottom_toBottomOf="parent"
+7     app:layout_constraintEnd_toEndOf="parent"
+8     app:layout_constraintHorizontal_bias="0.503"
+9     app:layout_constraintStart_toStartOf="parent"
+10   app:layout_constraintTop_toTopOf="parent"
+11   app:layout_constraintVertical_bias="0.869" />
+
+Теж саме робимо у файлі для ландшафтної орієнтації.
+У файлі MainActivity.java створюємо відповідні змінні для роботи з елементами інтерфейсу та обробник подій для SeekBar. Кожному елементу призначаємо обробник подій, який за допомогою функції updateViewColor() буде змінювати колір панелі.
+Код функції updateViewColor():
+1 private void updateViewColor(){
+2     int r = seekBarR.getProgress();
+3     int g = seekBarG.getProgress();
+4     int b = seekBarB.getProgress();
+5
+6     view.setBackgroundColor(Color.rgb(r, g, b));
+7 }
+
+Запускаємо застосунок та перевіряємо його роботу. 
+
+2.3 Висновки
+
+Під час лабораторної роботи було закріплено знання з обробки подій при використанні регуляторів та відображення змін на екрані за допомогою елемента View.
+2.4 Використані джерела
+Відеозвіт на YouTube: https://youtu.be/zR2k8GW-v6k
+
