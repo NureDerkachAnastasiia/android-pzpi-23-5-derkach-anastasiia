@@ -1,1 +1,118 @@
-https://youtu.be/6s0SZfH953o
+МІНІСТЕРСТВО ОСВІТИ І НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+
+
+
+Кафедра «Програмна інженерія»
+
+
+
+Звіт
+з лабораторної роботи №3
+з дисципліни «Програмування під Android»
+
+
+
+
+
+
+Виконала:									      Перевірив:
+ст. гр. ПЗПІ-23-5								ст. викл. каф. ПІ
+Деркач Анастасія								Сокорчук І. П.
+
+
+
+
+
+Харків 2024
+3 РОЗРОБКА ЗАСТОСУНКУ «КАЛЬКУЛЯТОР»
+	3.1 Завдання
+	
+	Розробити калькулятор на 4 базові арифметичні операції з кнопками для введення аргументів і дій. Калькулятор повинен мати адаптивний користувацький інтерфейс у різних орієнтаціях екрану та на екранах різної роздільної здатності.
+
+	3.2 Хід роботи
+	
+1.	Спочатку створюємо проект за шаблоном Empty Views Activity.
+2.	На цей пустий шаблон додаємо елемент TextView та 17 елементів Button. Текстове поле розміщуємо зверху, 17 кнопок розміщуємо посередині у вигляді таблиці, підписуємо їх та змінюємо колір фону та колір тексту.
+Код елемента TextView у файлі activity_main.xml:
+
+1 <TextView
+2     android:id="@+id/textView"
+3     android:layout_width="322dp"
+4     android:layout_height="99dp"
+5     android:text="0"
+6     android:textSize="60sp"
+7     app:layout_constraintBottom_toBottomOf="parent"
+8     app:layout_constraintEnd_toEndOf="parent"
+9     app:layout_constraintHorizontal_bias="0.486"
+10    app:layout_constraintStart_toStartOf="parent"
+11    app:layout_constraintTop_toTopOf="parent"
+12    app:layout_constraintVertical_bias="0.163" />
+
+3.	Створюємо у проекті нову папку layout-land та копіюємо туди файл activity_main.xml. Таким чином ми створили сторінку, яка буде відображатися в ландшафтній орієнтації екрану. Розміщуємо кнопки та текстове поле таким чином, щоб вони коректно відображались на горизонтальному екрані.
+Код елемента TextView у файлі activity_main.xml у ландшафтній орієнтації:
+1 <TextView
+2     android:id="@+id/textView"
+3     android:layout_width="505dp"
+4     android:layout_height="98dp"
+5     android:text="0"
+6     android:textSize="60sp"
+7     app:layout_constraintBottom_toBottomOf="parent"
+8     app:layout_constraintEnd_toEndOf="parent"
+9     app:layout_constraintHorizontal_bias="0.46"
+10    app:layout_constraintStart_toStartOf="parent"
+11    app:layout_constraintTop_toTopOf="parent"
+12    app:layout_constraintVertical_bias="0.084" />
+
+4.	Переходимо у файл MainActivity.java. Створюємо методи, які будуть прив’язувати до кнопок обробники подій. Також створюємо метод, який буде викликатися кнопкою «дорівнює» та метод, який буде викликатися кнопкою «відмінити».
+Код методу, що викликається кнопкою «дорівнює»:
+
+1  private void calculateResult () {
+2      if (!operator.isEmpty()) {
+3          second = Double.parseDouble(textView.getText().toString());
+4          double result = 0;
+5          switch (operator){
+6              case "+":
+7                  result = first + second;
+8                  break;
+9              case "-":
+10                 result = first - second;
+11                 break;
+12             case "*":
+13                 result = first * second;
+14                 break;
+15             case "/":
+16                 if(second != 0) {
+17                     result = first / second;
+18                 }
+19                 else {
+20                     textView.setText("Error");
+21                     newOperation = true;
+22                     return;
+23                 }
+24                 break;
+25         }
+26
+27         textView.setText(String.valueOf(result));
+28         operator = "";
+29         newOperation = true;
+30     }
+31 }
+
+Код методу, що викликається кнопкою «відмінити»:
+1 private void clear(){
+2     textView.setText("0");
+3     first = 0;
+4     second = 0;
+5     operator = "";
+6     newOperation = true;
+7 }
+
+5.	Тестуємо додаток у різних орієнтаціях екрану. Все працює як треба, помилок не знайдено.
+
+3.3 Висновки
+
+Під час лабораторної роботи було створено додаток простого калькулятора на 4 базові дії, закріплено знання з обробки подій при використанні кнопок, обчислення записаних з кнопок змінних та відображення результату на екрані.
+
+3.4 Використані джерела
+Відеозвіт: https://youtu.be/6s0SZfH953o
