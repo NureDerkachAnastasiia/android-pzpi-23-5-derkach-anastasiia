@@ -1,0 +1,181 @@
+МІНІСТЕРСТВО ОСВІТИ І НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+
+
+
+
+Кафедра «Програмна інженерія»
+
+
+
+
+Звіт
+з практичного заняття №3
+з дисципліни «Програмування під Android»
+
+
+
+
+
+Виконала:					      				Перевірив:
+ст. гр. ПЗПІ-23-5								ст. викл. каф. ПІ
+Деркач Анастасія								Сокорчук І. П.
+
+
+
+
+Харків 2024
+3 ПЗ ДІАЛОГОВІ ПАНЕЛІ (DIALOG) В ANDROID. ПЗ ОБРОБНИК ЧЕРГ ПОВІДОМЛЕНЬ (HANDLER) В ANDROID. ПЗ СПИСКИ З ПРОГОРТАННЯМ (RECYCLERVIEW ADAPTER)
+	3.1 Завдання
+
+	Ознайомитися з основними типами діалогових панелей в Android.
+Навчитися створювати та використовувати діалогові панелі в Android-застосунках.
+Засвоїти методи для налаштування діалогових панелей та їх взаємодії з користувачем.
+Засвоїти концепцію черги повідомлень (Message Queue) в Android.
+Вивчити роботу з обробником повідомлень (Handler) для взаємодії з потоками.
+Навчитися створювати та використовувати Handler для асинхронної обробки даних.
+Навчитися працювати із компонентом RecyclerView  для створення списків із прогортанням в Android, а також ознайомитися їх з принципами створення та використання адаптерів (Adapters) і керування даними у списках.
+ 
+	3.2 Хід роботи
+
+1.	Створення AlertDialog
+Створюємо новий проект. Додаємо до файлу activity_main.xml нову кнопку з написом Show Dialog. У файлі MainActivity.java створюємо такий метод:
+1 	public void showAlertDialog(View view) {
+2     AlertDialog.Builder builder = new AlertDialog.Builder(this);
+3     builder.setTitle("Діалог")
+4             .setMessage("Це приклад AlertDialog.")
+5             .setPositiveButton("OK", (dialog, which) -> {
+6             })
+7             .setNegativeButton("Cancel", (dialog, which) -> {
+8             })
+9             .show();
+10 }
+2.	Створення DatePickerDialog
+Додаємо до файлу activity_main.xml нову кнопку з написом Show DatePicker. У файлі MainActivity.java створюємо такий метод:
+1 	public void showDatePickerDialog(View view) {
+2     DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+3             (datePicker, year, month, day) -> {
+4             }, 2023, 8, 1);
+5     datePickerDialog.show();
+6 }
+
+3.	Створення Custom Dialog
+Додаємо до файлу activity_main.xml нову кнопку з написом Show Custom Dialog. Створюємо новий файл custom_dialog.xml для модулювання діалогового вікна, що містить елементи textView та editText. У файлі MainActivity.java створюємо такий метод:
+1 	public void showCustomDialog(View view) {
+2     LayoutInflater inflater = getLayoutInflater();
+3     View dialogView = inflater.inflate(R.layout.custom_dialog, null);
+4 
+5     AlertDialog.Builder builder = new AlertDialog.Builder(this);
+6     builder.setView(dialogView)
+7             .setPositiveButton("OK", (dialog, id) -> {
+8             })
+9             .setNegativeButton("Cancel", (dialog, id) -> {
+10                 dialog.dismiss();
+11             }); 
+12
+13     AlertDialog dialog = builder.create();
+14
+15     dialog.setOnShowListener(d -> {
+16         if (dialog.getWindow() != null) {
+17             WindowManager.LayoutParams params =
+18 dialog.getWindow().getAttributes();
+19
+20            params.width = WindowManager.LayoutParams.MATCH_PARENT;
+21             params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+22            dialog.getWindow().setAttributes(params);
+23        }
+24    });
+25
+26    dialog.show();
+27 }
+
+ 
+4.	Створення HandlerThread
+Додаємо до файлу activity_main.xml нову кнопку з написом Start Handler та елемент TextView із написом Message will appear here. У файлі MainActivity.java створюємо такий код:
+1 	startHandlerButton.setOnClickListener(v -> {
+2     backgroundHandler.post(() -> {
+3         try {
+4             Thread.sleep(3000);
+5         } catch (InterruptedException e) {
+6             e.printStackTrace();
+7         }
+8
+9         mainHandler.post(() -> handlerMessageTextView.setText("Task 
+10 completed in background thread"));
+11    });
+12 });
+
+5.	Створення RecyclerView
+Додаємо до файлу activity_main.xml елемент RecyclerView. Створюємо в окремому файлі класс MyAdapter:
+1 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> 2 {
+3     private List<String> mDataset;
+4
+5     public static class MyViewHolder extends RecyclerView.ViewHolder {
+6         public TextView textView;
+7
+8         public MyViewHolder(View v) {
+9             super(v);
+10             textView = v.findViewById(R.id.textView); 
+11 TextView
+12         }
+13   }
+14 
+16    public MyAdapter(List<String> myDataset) {
+17        mDataset = myDataset;
+18    }
+19
+20    @Override
+21    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) 22 {
+24        View v = LayoutInflater.from(parent.getContext())
+25                .inflate(R.layout.my_text_view, parent, false);
+26        return new MyViewHolder(v);
+27    }
+28
+29    @Override
+30    public void onBindViewHolder(MyViewHolder holder, int position) { 
+32        holder.textView.setText(mDataset.get(position));
+33    }
+34
+35    @Override
+36    public int getItemCount() {
+37        return mDataset.size();
+38    }
+39 }
+Додаємо до файлу MainActivity.java такий код:
+1 	RecyclerView recyclerView = findViewById(R.id.recyclerView);
+2
+3 recyclerView.setLayoutManager(new LinearLayoutManager(this));
+4
+5 List<String> myDataset = new ArrayList<>();
+6 for (int i = 0; i < 50; i++) {
+7     myDataset.add("Item " + (i + 1));
+8 }
+9
+10 MyAdapter adapter = new MyAdapter(myDataset);
+11 recyclerView.setAdapter(adapter);
+
+Створюємо файл my_text_view.xml та додаємо до нього такі елементи:
+1 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+2     xmlns:app="http://schemas.android.com/apk/res-auto"
+3     xmlns:tools="http://schemas.android.com/tools"
+4     android:layout_width="match_parent"
+5     android:layout_height="wrap_content">
+6
+7     <TextView
+8         android:id="@+id/textView"
+9         android:layout_width="wrap_content"
+10        android:layout_height="wrap_content"
+11        android:text="TextView"
+12        app:layout_constraintBottom_toBottomOf="parent"
+13        app:layout_constraintEnd_toEndOf="parent"
+14        app:layout_constraintStart_toStartOf="parent"
+15        app:layout_constraintTop_toTopOf="parent" />
+16 </androidx.constraintlayout.widget.ConstraintLayout>
+
+3.3 Висновки
+
+Під час практичної роботи було створено додаток для ознайомлення та опановування основних типів діалогових панелей та їхні атрибути налаштування; засвоєння концепції черги повідомлень, оброки подій Handler; навчання працювати із з компонентом RecyclerView для створення списків із прогортанням в Android та використання адаптерів (Adapters), керування даними у списках.
+
+3.4 Використані джерела
+
+Відеозвіт: 
