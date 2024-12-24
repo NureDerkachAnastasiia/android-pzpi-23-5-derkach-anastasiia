@@ -1,0 +1,109 @@
+МІНІСТЕРСТВО ОСВІТИ І НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+
+
+
+
+Кафедра «Програмна інженерія»
+
+
+
+
+Звіт
+з практичного заняття №4
+з дисципліни «Програмування під Android»
+
+
+
+
+
+Виконала:									Перевірив:
+ст. гр. ПЗПІ-23-5								доц. каф. ПІ
+Деркач Анастасія								Сокорчук І. П.
+
+
+
+
+Харків 2024
+4 СХОВИЩА ДАНИХ (PREFERENCES, БАЗА ДАНИХ SQLITE, ФАЙЛИ)
+	4.1 Завдання 
+
+	Ознайомитися із різними способами збереження даних у Android, зокрема з використанням SharedPreferences, бази даних SQLite та роботи з файлами. Навчитися застосовувати ці методи у прикладних проєктах.
+ 
+	4.2 Хід роботи
+
+	Cтворюємо новий проект та обираємо Empty Views Activity. До створеного файлу activity_main.xml додаємо два поля для вводу та кнопку. У обробнику подій кнопки визиваємо метод saveUserData(), при запуску застосунку визиваємо метод loadUserData(). Ось так виглядають ці методи:
+1 private void saveUserData() {
+2     String name = nameEditText.getText().toString();
+3     String ageText = ageEditText.getText().toString();
+4 
+5     if (name.isEmpty() || ageText.isEmpty()) {
+6         Toast.makeText(this, "Будь ласка, заповність усі поля!", Toast.LENGTH_SHORT).show();
+7         return;
+8     }
+9
+10    int age = Integer.parseInt(ageText);
+11
+12    SharedPreferences.Editor editor = sharedPreferences.edit();
+13    editor.putString("name", name);
+14    editor.putInt("age", age);
+15    editor.apply();
+16
+17    messageTextView.setText("Дані збережено! Ім'я: " + name + ", Вік: " + 18 age);
+19    messageTextView.setVisibility(View.VISIBLE); }
+20
+21 private void loadUserData() {
+22   String name = sharedPreferences.getString("name", "");
+23    int age = sharedPreferences.getInt("age", 0);
+24
+25    if (!name.isEmpty()) {
+26        nameEditText.setText(name);
+27    }
+28    if (age != 0) {
+29        ageEditText.setText(String.valueOf(age));
+30    }
+31 }
+	Попрацюємо з базою даних. Створюємо ще два поля для вводу, кнопку та recyclerView. Створюємо допоміжні класи User, DatabaseHelper та UserAdapter. Також створюємо файл user_item.xml для створення вигляду елементів у recyclerView. В обробник подій кнопки призначаємо наступний код:
+1 buttonAddUser.setOnClickListener(v -> {
+2     String name = editTextName.getText().toString();
+3     int age = Integer.parseInt(editTextAge.getText().toString());
+4
+5     databaseHelper.addUser(name, age);
+6     loadUsers();
+7 });
+
+	Для реалізації файлової роботи у файлі activity_main.xml створюємо поле для вводу, текстове поле та дві кнопки. У обробниках подій кнопок викликаємо наступні методи:
+1 private void writeToFile(String data) {
+2     try {
+3         FileOutputStream fos = openFileOutput("myfile.txt", MODE_PRIVATE);
+4         fos.write(data.getBytes());
+5         fos.close();
+6     } catch (IOException e) {
+7         e.printStackTrace();
+8     }
+9 }
+10
+11 private void readFromFile() {
+12    try {
+13        FileInputStream fis = openFileInput("myfile.txt");
+14        BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+15        StringBuilder stringBuilder = new StringBuilder();
+16        String line;
+17        while ((line = reader.readLine()) != null) {
+18            stringBuilder.append(line).append("\n");
+19        }
+20        fis.close();
+21        fileContentTextView.setText(stringBuilder.toString());
+22    } catch (IOException e) {
+23        e.printStackTrace();
+24    }
+25 }
+
+ 
+	4.3 Висновки
+
+	Під час практичної роботи було: ознайомлено з основними способами збереження даних у Android: Використання SharedPreferences для збереження простих налаштувань користувача у вигляді пар ключ-значення. Застосування SQLite для зберігання великих структурованих даних у реляційній базі. Робота з файлами для запису та зчитування даних із локального сховища додатка.
+
+	4.4 Використані  джерела
+
+	Відеозвіт: https://youtu.be/r1HLYCwqagY
