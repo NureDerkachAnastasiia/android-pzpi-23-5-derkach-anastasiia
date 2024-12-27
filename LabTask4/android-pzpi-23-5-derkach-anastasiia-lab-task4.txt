@@ -1,0 +1,98 @@
+МІНІСТЕРСТВО ОСВІТИ І НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+
+
+
+
+Кафедра «Програмна інженерія»
+
+
+
+Звіт
+з лабораторної роботи №4
+з дисципліни «Програмування під Android»
+
+
+
+
+
+
+
+Виконала:									Перевірив:
+ст. гр. ПЗПІ-23-5								доц. каф. ПІ
+Деркач Анастасія								Сокорчук І. П.
+
+
+
+Харків 2024
+	ЗАВДАННЯ
+
+	Розробити застосунок для ведення нотаток. Застосунок повинен дозволяти переглядати список нотаток, створювати нову нотатку, редагувати нотатку та видаляти нотатку. Кожна нотатка повинна мати назву, опис, важливість (три класи), час і дату призначення і картинку (вибирається з галереї). У списку нотатки відображаються з іконкою з галереї і часом створення (праворуч зверху більш дрібним шрифтом), а також графічним відображенням класу важливості (іконка з множини).
+Потрібно реалізувати функції додавання, видалення, редагування (без збереження між перезапуск додатку) нотаток.
+Видалення/редагування викликаються з контекстного меню при довгому натисненні, додавання - з основного меню в ActionBar. У ActionBar реалізувати пошук / фільтрація заміток за змістом тексту, а також фільтрацію за важливістю. Текстові елементи користувацького інтерфейсу повинні бути локалізовані українською та англійською мовами.
+ 
+	ХІД РОБОТИ
+
+	Cтворюємо новий проект та обираємо Empty Views Activity. Починаємо розробку з проектування інтерфейсу. На головній сторінці додатку розміщуємо recyclerView для перегляду списку нотаток та toolbar для організації меню. Створюємо клас Note. У методі onCreate прописуємо наповнення для списку нотаток, а також обробники подій для натискання на нотатку. 
+	За допомогою елементу EditText організовуємо пошук за назвою нотатки. Реалізація метода пошуку:
+
+1 private void filterNotesByQuery(String query) {
+2     List<Note> filteredNotes = new ArrayList<>();
+3     for (Note note : originalNotes) {
+4         if (note.getTitle().toLowerCase().contains(query.toLowerCase())) {
+5             filteredNotes.add(note);
+6         }
+7     }
+8     noteAdapter.updateNotes(filteredNotes);
+9 }
+
+	За допомогою пункту меню «Фільтрування» та діалогового вікна організовуємо фільтрацію нотаток за важливістю. Реалізація метода фільтрації:
+
+1 private void filterNotesByPriority(Note.PriorityLevel priorityLevel) {
+2     List<Note> filteredNotes = new ArrayList<>();
+3     for (Note note : originalNotes) {
+4         if (note.getPriorityLevel() == priorityLevel) {
+5             filteredNotes.add(note);
+6         }
+7     }
+8     noteAdapter.updateNotes(filteredNotes);
+9 }
+
+	Далі створюємо інтерфейс сторінки для перегляду нотатки. Наповнюємо метод onCreate. 
+	Створюємо інтерфейс сторінки для редагування/додавання нотатки. У методі onCreate прописуємо логіку заповнення полів сторінки, якщо користувач редагує нотатку та якщо створює:
+
+1 Intent intent = getIntent();
+2 if (intent.hasExtra(EXTRA_NOTE)) {
+3     currentNote = (Note) intent.getSerializableExtra(EXTRA_NOTE);
+4     populateFields(currentNote);
+5 } else {
+6     currentNote = null;
+7 }
+
+	Прописуємо обробники подій для кнопок вибору картинки та збереження нотатки. Для операції вибору картинки нотатки створюємо додаткову сторінку для відображення галереї. Обробник події кнопки відкриття галереї:
+
+1 private void openGallery() {
+2     Intent intent = new Intent(this, GaleryActivity.class);
+3     startActivityForResult(intent, REQUEST_CODE_GALLERY);
+4 }
+
+	
+Метод обробки результатів вибору картинки з галереї користувачем:
+
+1 @Override
+2 protected void onActivityResult(int requestCode, int resultCode, @Nullable 3 Intent data) {
+4     super.onActivityResult(requestCode, resultCode, data);
+5     if (requestCode == REQUEST_CODE_GALLERY && resultCode == RESULT_OK &&  data != null) {
+6         selectedIconId = data.getIntExtra("selected_icon_id", R.drawable.ic_note_person);
+7         ImageView imageView = findViewById(R.id.imageView);
+8         imageView.setImageResource(selectedIconId);
+9     }
+10 }
+
+	ВИСНОВКИ
+
+Під час виконання лабораторної роботи я набула навичок створення дійсного повноцінного проекту з Android. Я навчилася використовувати різні елементи інтерфейсу та архітектурі застосунку. 
+
+	ВИКОРИСТАНІ ДЖЕРЕЛА
+
+	Відеозвіт: https://youtu.be/v3lsjAOKf50
