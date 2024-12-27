@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Notes</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="delete_note">Delete Note</string>
+    <string name="priority_low">Low</string>
+    <string name="priority_medium">Medium</string>
+    <string name="priority_high">High</string>
+    <string name="filter_priority">Filter priority</string>
+    <string name="search_hint">Search</string>
+    <string name="search">Search</string>
+    <string name="add_note">Add Note</string>
+    <string name="name_hint">Enter name</string>
+    <string name="desc_hint">Enter description</string>
+    <string name="image_choose">Image</string>
+</resources>
